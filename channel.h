@@ -18,6 +18,7 @@ public:
     void setIndex(unsigned int i){ index_ = i; }
     int getEvent() { return events_; }
     int getFd() { return fd_; }
+    void set_revents(int revt) { revents_ = revt; } // used by pollers
     std::string getName(){ return name; };
     //void registerWriteCallback();
 private:
@@ -26,6 +27,7 @@ private:
     Callback readCallback_;
     Callback writeCallback_;
     int events_;
+    int revents_;
     int fd_;
     int index_;
     std::string name;

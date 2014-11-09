@@ -2,9 +2,8 @@
 #include "pollpoller.h"
 #include "channel.h"
 
-EventLoop::EventLoop()
+EventLoop::EventLoop():poller_(new Poller()),quit_(false)
 {
-
 }
 
 EventLoop::~EventLoop()
@@ -14,15 +13,18 @@ EventLoop::~EventLoop()
 
 void EventLoop::loop()
 {
-    //get active channels
-    poller->poll(&active_);
-    for(ChannelList::iterator it = active_.begin();it != active_.end();++it)
+    while(!quit_)
     {
-        (*it)->handleEvent();
+        //get active channels
+        poller_->poll(&active_);
+        for(ChannelList::iterator it = active_.begin();it != active_.end();++it)
+        {
+            (*it)->handleEvent();
+        }
     }
 }
 
 void EventLoop::updateChannel(Channel* c)
 {
-    poller->updateChannel(c);
+    poller_->updateChannel(c);
 }

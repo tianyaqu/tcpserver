@@ -1,7 +1,7 @@
 #include "channel.h"
 #include "eventloop.h"
 
-Channel::Channel(EventLoop* loop,int fd):loop_(loop),readCallback_(NULL),writeCallback_(NULL),events_(0),fd_(fd)
+Channel::Channel(EventLoop* loop,int fd):loop_(loop),readCallback_(NULL),writeCallback_(NULL),events_(0),revents_(0),fd_(fd),index_(-1)
 {
 }
 

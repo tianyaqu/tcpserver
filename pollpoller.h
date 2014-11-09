@@ -1,5 +1,6 @@
 #include <vector>
 #include <map>
+#include <poll.h>
 
 class Channel;
 class Poller
@@ -13,6 +14,10 @@ public:
     void updateChannel(Channel* c);
     void removeChannel(Channel* c);
 private:
-    std::vector<struct pollfd> fdSet_;
+    //std::vector<struct pollfd> fdSet_;
+    typedef std::vector<struct pollfd> PollFdList;
+    PollFdList fdSet_;
+  typedef std::map<int, Channel*> ChannelMap;
     std::map<int,Channel*> channelMap_;
+    void fillActiveChannels(ChannelList*) const;
 };

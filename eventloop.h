@@ -12,5 +12,6 @@ public:
     void updateChannel(Channel* c);
 private:
     ChannelList active_;
-    Poller *poller;
+    Poller* poller_;
+    bool quit_;
 };
