@@ -1,5 +1,6 @@
 #include "pollpoller.h"
 #include "channel.h"
+#include <poll.h>
 
 Poller::Poller()
 {
@@ -16,11 +17,11 @@ void Poller::updateChannel(Channel* c)
     {
         struct pollfd fd;
         fd.fd = c->getFd();
-        fd.event = c->getEvent();
-        fd.revent = 0;
-        fdSet_.pushback(fd);
+        fd.events = c->getEvent();
+        fd.revents = 0;
+        fdSet_.push_back(fd);
 
-        int index = static_cast<int>(fdSet.size()) - 1;
+        int index = static_cast<int>(fdSet_.size()) - 1;
         c->setIndex(index);
         channelMap_[fd.fd] = c;
     }
@@ -28,8 +29,8 @@ void Poller::updateChannel(Channel* c)
     {
         unsigned int index = c->getIndex();
         struct pollfd& fd = fdSet_[index];
-        fd.event = c->getEvent();
-        fd.revent = 0;
+        fd.events = c->getEvent();
+        fd.revents = 0;
     }
 }
 
@@ -40,5 +41,9 @@ void Poller::removeChannel(Channel* c)
     iter_swap(fdSet_.begin()+index, fdSet_.end()-1);
 
     channelMap_[fd]->setIndex(index);
-    fdSet_.popback();
+    fdSet_.pop_back();
+}
+
+void Poller::poll(ChannelList* list)
+{
 }

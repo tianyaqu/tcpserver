@@ -1,7 +1,11 @@
 #include "eventloop.h"
 #include "acceptor.h"
+#include "channel.h"
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#include <iostream>
+#include <strings.h>
+#include <boost/bind.hpp>
 
 static const in_addr_t kInaddrAny = INADDR_ANY;
 static const in_addr_t kInaddrLoopback = INADDR_LOOPBACK;
@@ -17,24 +21,25 @@ Acceptor::Acceptor(EventLoop *loop,bool loopbackOnly,unsigned short port)
 
     //innet addr;
     struct sockaddr_in innetAddr;
-    bzero(&innetAddr,sizeof(innetAddr);
+    bzero(&innetAddr,sizeof(innetAddr));
     innetAddr.sin_family = AF_INET;
     in_addr_t ip = loopbackOnly ? kInaddrLoopback : kInaddrAny;
     innetAddr.sin_addr.s_addr = htobe32(ip);
     innetAddr.sin_port = htobe16(port);
 
-    int ret = ::bind(listenFd,sockAddr,sizeof(sockAddr));
+    int ret = ::bind(listenFd,(struct sockaddr*)&innetAddr,sizeof(innetAddr));
     if(ret < 0)
     {
         std::cout<<"error in bind listen socket\n";
     }
 
-    accpChannel_ = new Channel(loop,listenFd);
+    acceptChannel_ = new Channel(loop,listenFd);
 }
 
 void Acceptor::listen()
 {
-    acceptChannel_->registerReadCallback(boost::bind(Acceptor::onRead,this));
+    acceptChannel_->registerReadCallback(
+        boost::bind(&Acceptor::onRead,this));
     acceptChannel_->enableRead();
 }
 

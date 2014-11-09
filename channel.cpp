@@ -1,8 +1,7 @@
 #include "channel.h"
 #include "eventloop.h"
-#include <poll.h>
 
-Channel::Channel(EventLoop* loop,int fd):loop_(loop)readCallback_(NULL),writeCallback_(NULL),events_(0),fd_(fd);
+Channel::Channel(EventLoop* loop,int fd):loop_(loop),readCallback_(NULL),writeCallback_(NULL),events_(0),fd_(fd)
 {
 }
 
@@ -16,12 +15,12 @@ void Channel::update()
     loop_->updateChannel(this);
 }
 
-void Channel::registerReadCallback(Callback &r)
+void Channel::registerReadCallback(const Callback& r)
 {
     readCallback_ = r;
 }
 
-void Channel::registerWriteCallback(Callback &w)
+void Channel::registerWriteCallback(const Callback& w)
 {
     writeCallback_ = w;
 }
@@ -36,7 +35,7 @@ void Channel::handleEvent()
         }
     }
 
-    if(events & POLLOUT)
+    if(events_ & POLLOUT)
     {
         if(writeCallback_)
         {

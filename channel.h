@@ -1,15 +1,16 @@
 #include <boost/function.hpp>
-#include <string>
+#include <poll.h>
 
-typedef boost::function<void()> Callback;
 class EventLoop;
 class Channel
 {
 public:
-    Channel(EventLoop* loop);
+    typedef boost::function<void()> Callback;
+    Channel(EventLoop* loop,int fd);
+    //Channel(EventLoop* loop);
     ~Channel();
-    void registerReadCallback(Callback &r);
-    void registerWriteCallback(Callback &w);
+    void registerReadCallback(const Callback& r);
+    void registerWriteCallback(const Callback& w);
     void handleEvent();
     void enableRead() { events_ |= (POLLIN|POLLPRI);update();}
     void enableWrite(){ events_ |= POLLOUT;update();}
@@ -17,7 +18,7 @@ public:
     void setIndex(unsigned int i){ index_ = i; }
     int getEvent() { return events_; }
     int getFd() { return fd_; }
-    string getName(){ return name; };
+    std::string getName(){ return name; };
     //void registerWriteCallback();
 private:
     //when connectiton is established,notify the poller.
@@ -27,6 +28,6 @@ private:
     int events_;
     int fd_;
     int index_;
-    string name;
+    std::string name;
     EventLoop* loop_;
 };

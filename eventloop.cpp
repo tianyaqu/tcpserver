@@ -1,5 +1,8 @@
 #include "eventloop.h"
-EventLoop::EventLoop():active_(NULL)
+#include "pollpoller.h"
+#include "channel.h"
+
+EventLoop::EventLoop()
 {
 
 }
@@ -15,7 +18,7 @@ void EventLoop::loop()
     poller->poll(&active_);
     for(ChannelList::iterator it = active_.begin();it != active_.end();++it)
     {
-        it->handleEvent();
+        (*it)->handleEvent();
     }
 }
 
