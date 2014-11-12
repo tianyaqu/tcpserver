@@ -1,9 +1,12 @@
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
+#include <map>
+#include <string>
 
 class EventLoop;
 class Acceptor;
+class TcpConnection;
 class TcpServer
 {
     public:
@@ -11,8 +14,10 @@ class TcpServer
         ~TcpServer();
         void start();
         void OnConnection(int fd,const struct sockaddr_in& addr);
+        EventLoop* currentLoop(){return loop_;}
     private:
-        void onConnection(); 
-        EventLoop *loop_;
+        EventLoop* loop_;
         Acceptor* acceptor_;
+        std::map<const std::string,TcpConnection*> connMap_;
+        unsigned int connIndex_;
 };

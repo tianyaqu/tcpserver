@@ -28,3 +28,8 @@ void EventLoop::updateChannel(Channel* c)
 {
     poller_->updateChannel(c);
 }
+
+void EventLoop::runInLoop(const Functor& f)
+{
+    f();
+}

@@ -5,7 +5,7 @@ LIBS	= -lboost_system
 CPPFLAGS	= -g
 
 TARGET	= server 
-OBJECTS	= main.o acceptor.o channel.o tcpserver.o pollpoller.o eventloop.o
+OBJECTS	= main.o acceptor.o channel.o tcpserver.o pollpoller.o eventloop.o tcpconnection.o
 
 
 
