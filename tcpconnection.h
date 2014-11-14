@@ -2,7 +2,7 @@
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <string>
-#include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 class Channel;
 class EventLoop;
@@ -13,7 +13,9 @@ public:
     TcpConnection(EventLoop* loop,int fd,const struct sockaddr_in& self,const struct sockaddr_in& peer);
     ~TcpConnection();
     void connEstablished();
+    void connClosed();
 private:
+    typedef boost::function<void()> Callback;
     enum StateE { kDisconnected, kConnecting, kConnected, kDisconnecting };
     EventLoop* loop_;
     Channel* channel_; 

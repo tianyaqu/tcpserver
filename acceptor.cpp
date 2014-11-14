@@ -36,6 +36,7 @@ Acceptor::Acceptor(EventLoop *loop,bool loopbackOnly,unsigned short port)
 
 Acceptor::~Acceptor()
 {
+    ::close(listenFd_);
 }
 
 void Acceptor::listen()

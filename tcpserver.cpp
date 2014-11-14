@@ -20,7 +20,7 @@ TcpServer::~TcpServer()
 void TcpServer::OnConnection(int fd,const struct sockaddr_in& addr)
 {
     sockaddr tmp;
-    std::cout<<"new connection from peer:"<<inet_ntoa(addr.sin_addr)<<" ["<<addr.sin_port<<"] \n";
+    std::cout<<"xnew connection from peer:"<<inet_ntoa(addr.sin_addr)<<" ["<<addr.sin_port<<"] \n";
     
     char buff[128] = {0};
     snprintf(buff,sizeof(buff),buff,"%s#%d",inet_ntoa(addr.sin_addr),connIndex_++);
